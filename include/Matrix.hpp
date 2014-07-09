@@ -34,6 +34,9 @@ public:
     // initialize with array
     Matrix(size_t, size_t, const T*);
 
+    // initialize with initializer list
+    Matrix(size_t, size_t, const std::initializer_list<T>&);
+
     virtual ~Matrix();
 
     // access items
@@ -68,6 +71,13 @@ Matrix<T>::Matrix(size_t row, size_t col, const T& value) :
 template <typename T>
 Matrix<T>::Matrix(size_t row, size_t col, const T* value) :
     _rows(row), _cols(col), data(value, _rows * _cols)
+{
+}
+
+template <typename T>
+Matrix<T>::Matrix(size_t row, size_t col,
+                  const std::initializer_list<T>& values) :
+    _rows(row), _cols(col), data(values)
 {
 }
 

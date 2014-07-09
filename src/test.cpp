@@ -24,5 +24,14 @@ int main(int argc, char *argv[])
     std::cout << "Matrix4 size: " << mat4.size() << std::endl;
     std::cout << mat4(2, 2) << std::endl;
 
+    Matrix<int> mat5(3, 3,
+    {
+        10, 20, 30,
+        40, 50, 60,
+        70, 80, 90
+    });
+    std::cout << "Matrix5 size: " << mat5.size() << std::endl;
+    std::cout << mat5(2, 2) << std::endl;
+
     return 0;
 }
