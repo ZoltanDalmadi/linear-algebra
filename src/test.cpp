@@ -3,20 +3,26 @@
 
 int main(int argc, char *argv[])
 {
-    Matrix<int> mat(10, 10, 3);
+    Matrix<int> mat1;
+    std::cout << "Matrix1 size: " << mat1.size() << std::endl;
+    Matrix<int> mat2(8, 8);
+    std::cout << "Matrix2 size: " << mat2.size() << std::endl;
+    Matrix<int> mat3(10, 10, 3);
+    std::cout << "Matrix3 size: " << mat3.size() << std::endl;
 
-    std::cout << mat.size() << std::endl;
-    std::cout << mat(9, 9) << std::endl;
+    std::cout << mat2(5, 5) << std::endl;
+    std::cout << mat3(9, 7) << std::endl;
 
-    try
+    int arr[] =
     {
-        std::cout << mat(10, 0) << std::endl;
-    }
+        1, 2, 3,
+        4, 5, 6,
+        7, 8, 9
+    };
 
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
+    Matrix<int> mat4(3, 3, arr);
+    std::cout << "Matrix4 size: " << mat4.size() << std::endl;
+    std::cout << mat4(2, 2) << std::endl;
 
     return 0;
 }
