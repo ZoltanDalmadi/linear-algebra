@@ -14,6 +14,7 @@ public:
 
     // access items
     T& operator()(size_t, size_t);
+    inline size_t size() const;
 
 private:
     size_t _rows;
@@ -42,6 +43,12 @@ T& Matrix<T>::operator()(size_t row, size_t col)
 {
     if (data.size() > 0 && row <= _rows && col <= _cols)
         return data[row * _cols + row];
+}
+
+template <typename T>
+inline size_t Matrix<T>::size() const
+{
+    return data.size();
 }
 
 #endif /* end of include guard: MATRIX_HPP */
