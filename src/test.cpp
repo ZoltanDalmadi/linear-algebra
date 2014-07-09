@@ -7,6 +7,16 @@ int main(int argc, char *argv[])
 
     std::cout << mat.size() << std::endl;
     std::cout << mat(9, 9) << std::endl;
-    std::cout << mat(0, 0) << std::endl;
+
+    try
+    {
+        std::cout << mat(10, 0) << std::endl;
+    }
+
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
     return 0;
 }

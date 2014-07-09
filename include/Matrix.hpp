@@ -2,6 +2,21 @@
 #define MATRIX_HPP
 
 #include <valarray>
+#include <exception>
+
+class SimpleException : public std::exception
+{
+private:
+    const char* message;
+
+public:
+    SimpleException(const char* msg) throw() : message(msg) {}
+    virtual ~SimpleException() {}
+    virtual const char* what() const throw()
+    {
+        return message;
+    }
+};
 
 template <typename T>
 class Matrix
@@ -57,6 +72,8 @@ T& Matrix<T>::operator()(size_t row, size_t col)
 {
     if (data.size() > 0 && row < _rows && col < _cols)
         return data[row * _cols + row];
+    else
+        throw SimpleException("Index out of range!");
 }
 
 template <typename T>
