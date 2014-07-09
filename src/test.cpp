@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    Matrix<T> mat;
-    std::cout << mat << std::endl;
+    Matrix<int> mat(4, 4);
+    std::cout << mat(1, 1) << std::endl;
     return 0;
 }

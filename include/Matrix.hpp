@@ -9,8 +9,11 @@ class Matrix
 public:
     // initializes to zero matrix
     Matrix();
+    Matrix(size_t, size_t);
     virtual ~Matrix();
-    T &operator()(size_t, size_t);
+
+    // access items
+    T& operator()(size_t, size_t);
 
 private:
     size_t _rows;
@@ -19,7 +22,13 @@ private:
 };
 
 template <typename T>
-Matrix<T><T>::Matrix() : _rows(0), _cols(0), data(T())
+Matrix<T>::Matrix() : _rows(0), _cols(0), data()
+{
+}
+
+template <typename T>
+Matrix<T>::Matrix(size_t row, size_t col) :
+    _rows(row), _cols(col), data(_rows * _cols)
 {
 }
 
@@ -29,8 +38,10 @@ Matrix<T>::~Matrix()
 }
 
 template <typename T>
-T &Matrix<T>::operator()(size_t col, size_t row)
+T& Matrix<T>::operator()(size_t row, size_t col)
 {
+    if (data.size() > 0 && row <= _rows && col <= _cols)
+        return data[row * _cols + row];
 }
 
 #endif /* end of include guard: MATRIX_HPP */
