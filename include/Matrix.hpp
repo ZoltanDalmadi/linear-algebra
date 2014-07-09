@@ -7,16 +7,20 @@ template <typename T>
 class Matrix
 {
 public:
-    // initializes to zero matrix
+    // initialize to empty matrix
     Matrix();
+
+    // initialize to zero matrix
     Matrix(size_t, size_t);
     virtual ~Matrix();
 
     // access items
     T& operator()(size_t, size_t);
-    inline size_t size() const;
 
-private:
+    // returns matrix size
+    size_t size() const;
+
+protected:
     size_t _rows;
     size_t _cols;
     std::valarray<T> data;
