@@ -12,6 +12,10 @@ public:
 
     // initialize to zero matrix
     Matrix(size_t, size_t);
+
+    // initialize all items to a value
+    Matrix(size_t, size_t, const T&);
+
     virtual ~Matrix();
 
     // access items
@@ -38,6 +42,12 @@ Matrix<T>::Matrix(size_t row, size_t col) :
 }
 
 template <typename T>
+Matrix<T>::Matrix(size_t row, size_t col, const T& value) :
+    _rows(row), _cols(col), data(value, _rows * _cols)
+{
+}
+
+template <typename T>
 Matrix<T>::~Matrix()
 {
 }
@@ -45,7 +55,7 @@ Matrix<T>::~Matrix()
 template <typename T>
 T& Matrix<T>::operator()(size_t row, size_t col)
 {
-    if (data.size() > 0 && row <= _rows && col <= _cols)
+    if (data.size() > 0 && row < _rows && col < _cols)
         return data[row * _cols + row];
 }
 
