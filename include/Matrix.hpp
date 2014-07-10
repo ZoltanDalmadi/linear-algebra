@@ -45,6 +45,8 @@ public:
     // prints out the matrix to a stream
     void printMatrix(std::ostream&);
 
+    Matrix<T> transpose();
+
     // returns matrix size
     size_t size() const;
 
@@ -125,6 +127,21 @@ std::ostream& operator<<(std::ostream& os, Matrix<T>& obj)
 {
     obj.printMatrix(os);
     return os;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::transpose()
+{
+    Matrix<T> trans(_cols, _rows);
+
+    for (size_t n = 0; n < this->_cols * _rows; ++n)
+    {
+        int i = n / _rows;
+        int j = n % _rows;
+        trans.data[n] = this->data[_cols * j + i];
+    }
+
+    return trans;
 }
 
 template <typename T>

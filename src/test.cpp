@@ -12,20 +12,16 @@ int main(int argc, char *argv[])
 
     int arr[] =
     {
-        1, 2, 3,
-        4, 5, 6,
-        7, 8, 9
+        1,  2,  3,  4,
+        5,  6,  7,  8,
+        9, 10, 11, 12
     };
 
-    Matrix<int> mat4(3, 3, arr);
+
+    Matrix<int> mat4(3, 4, arr);
     std::cout << "Matrix4: " << std::endl << std::endl << mat4 << std::endl;
 
-    Matrix<int> mat5(3, 3,
-    {
-        0, 0, 5,
-        4, 6, 12,
-        7, 8, 3
-    });
+    Matrix<int> mat5 = mat4.transpose();
 
     std::cout << "Matrix5: " << std::endl << std::endl << mat5 << std::endl;
 
