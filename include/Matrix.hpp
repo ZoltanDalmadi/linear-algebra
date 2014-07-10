@@ -42,6 +42,9 @@ public:
     // access items
     T& operator()(size_t, size_t);
 
+    // prints out the matrix to a stream
+    void printMatrix(std::ostream&);
+
     // returns matrix size
     size_t size() const;
 
@@ -93,6 +96,35 @@ T& Matrix<T>::operator()(size_t row, size_t col)
         return data[row * _cols + col];
     else
         throw SimpleException("Index out of range!");
+}
+
+template <typename T>
+void Matrix<T>::printMatrix(std::ostream& os)
+{
+    T streamWidth = std::to_string(this->data.max()).size();
+
+    for (size_t i = 0; i < _rows; ++i)
+    {
+        os << "|";
+
+        for (size_t j = 0; j < _cols; ++j)
+        {
+            os.width(streamWidth);
+            os << this->data[i * _cols + j];
+
+            if (j == _cols - 1)
+                os << "|" << std::endl;
+            else
+                os << " ";
+        }
+    }
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, Matrix<T>& obj)
+{
+    obj.printMatrix(os);
+    return os;
 }
 
 template <typename T>

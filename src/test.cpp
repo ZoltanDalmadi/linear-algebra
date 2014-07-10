@@ -3,15 +3,12 @@
 
 int main(int argc, char *argv[])
 {
-    Matrix<int> mat1;
-    std::cout << "Matrix1 size: " << mat1.size() << std::endl;
+    // Matrix<int> mat1;
+    // std::cout << "Matrix1 size: " << mat1.size() << std::endl;
     Matrix<int> mat2(8, 8);
-    std::cout << "Matrix2 size: " << mat2.size() << std::endl;
-    Matrix<int> mat3(10, 10, 3);
-    std::cout << "Matrix3 size: " << mat3.size() << std::endl;
-
-    std::cout << mat2(5, 5) << std::endl;
-    std::cout << mat3(9, 7) << std::endl;
+    std::cout << "Matrix2: " << std::endl << std::endl << mat2 << std::endl;
+    Matrix<int> mat3(10, 10, 666);
+    std::cout << "Matrix3: " << std::endl << std::endl << mat3 << std::endl;
 
     int arr[] =
     {
@@ -21,17 +18,16 @@ int main(int argc, char *argv[])
     };
 
     Matrix<int> mat4(3, 3, arr);
-    std::cout << "Matrix4 size: " << mat4.size() << std::endl;
-    std::cout << mat4(2, 2) << std::endl;
+    std::cout << "Matrix4: " << std::endl << std::endl << mat4 << std::endl;
 
     Matrix<int> mat5(3, 3,
     {
-        10, 20, 30,
-        40, 50, 60,
-        70, 80, 90
+        0, 0, 5,
+        4, 6, 12,
+        7, 8, 3
     });
-    std::cout << "Matrix5 size: " << mat5.size() << std::endl;
-    std::cout << mat5(2, 2) << std::endl;
+
+    std::cout << "Matrix5: " << std::endl << std::endl << mat5 << std::endl;
 
     return 0;
 }
