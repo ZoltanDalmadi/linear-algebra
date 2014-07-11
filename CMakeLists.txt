@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(Matrix)
-set(CMAKE_CXX_FLAGS -std=c++11)
+set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_BUILD_TYPE Debug)
 include_directories(include)

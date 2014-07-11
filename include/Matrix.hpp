@@ -46,6 +46,11 @@ public:
     Matrix<T> operator-(const Matrix<T>&) const;
     Matrix<T>& operator-=(const Matrix<T>&);
 
+    Matrix<T> operator*(const T&) const;
+    Matrix<T>& operator*=(const T&);
+    Matrix<T> operator/(const T&) const;
+    Matrix<T>& operator/=(const T&);
+
     // access items
     T& operator()(size_t, size_t);
 
@@ -141,6 +146,36 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& rhs)
     else
         throw SimpleException("Only equal sized matrices can be subtracted!");
 
+    return *this;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const T& rhs) const
+{
+    Matrix<T> result(*this);
+    result *= rhs;
+    return result;
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator*=(const T& rhs)
+{
+    this->data *= rhs;
+    return *this;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator/(const T& rhs) const
+{
+    Matrix<T> result(*this);
+    result /= rhs;
+    return result;
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator/=(const T& rhs)
+{
+    this->data /= rhs;
     return *this;
 }
 
