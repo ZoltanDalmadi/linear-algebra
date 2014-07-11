@@ -3,30 +3,34 @@
 
 int main(int argc, char *argv[])
 {
-    // Matrix<int> mat1;
-    // std::cout << "Matrix1 size: " << mat1.size() << std::endl;
-    Matrix<int> mat2(8, 8);
-    std::cout << "Matrix2: " << std::endl << std::endl << mat2 << std::endl;
-    Matrix<int> mat3(10, 10, 6);
-    std::cout << "Matrix3: " << std::endl << std::endl << mat3 << std::endl;
-
-    Matrix<int> mat4(3, 3,
+    Matrix<double> A(3, 3,
     {
-        1, 2, 3,
-        4, 5, 6,
-        7, 8, 9
+        1, 0, 2,
+        -1, 3, 1,
+        4, 5, -12
     });
 
-    std::cout << "Matrix4: " << std::endl << std::endl << mat4 << std::endl;
+    std::cout << "A:" << std::endl << A << std::endl;
 
-    Matrix<int> mat5 = mat4.transpose();
-    std::cout << "Matrix5: " << std::endl << std::endl << mat5 << std::endl;
+    Matrix<double> B(3, 3,
+    {
+        3, 1, 6,
+        2, 1, 23,
+        34, 3, 1
+    });
 
-    Matrix<int> mat6 = mat5 * 4;
-    std::cout << "Matrix6: " << std::endl << std::endl << mat6 << std::endl;
+    std::cout << "B:" << std::endl << B << std::endl;
 
-    Matrix<int> mat7 = mat6 / 2;
-    std::cout << "Matrix7: " << std::endl << std::endl << mat7 << std::endl;
+    Matrix<double> C = A * B;
+
+    std::cout << "A * B:" << std::endl << C << std::endl;
+
+    Matrix<double> D = 1.0 / C;
+
+    std::cout << "D:" << std::endl << D << std::endl;
+
+    Matrix<double> E = 9 * D;
+    std::cout << "E:" << std::endl << E << std::endl;
 
     return 0;
 }

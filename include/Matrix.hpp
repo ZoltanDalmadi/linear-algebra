@@ -22,45 +22,217 @@ template <typename T>
 class Matrix
 {
 public:
-    // initialize to empty matrix
-    Matrix();
 
-    // initialize to zero matrix
-    Matrix(size_t, size_t);
+    //-------------------------------------------------------------------------
+    //  CONSTRUCTORS
 
-    // initialize all items to a value
-    Matrix(size_t, size_t, const T&);
+    // Initialize to empty matrix
+    Matrix() : _rows(0), _cols(0), data() {}
 
-    // initialize with array
-    Matrix(size_t, size_t, const T*);
+    // Initialize to zero matrix
+    Matrix(size_t row, size_t col) :
+        _rows(row), _cols(col), data(_rows * _cols) {}
 
-    // initialize with initializer list
-    Matrix(size_t, size_t, const std::initializer_list<T>&);
+    // Initialize all items to a value
+    Matrix(size_t row, size_t col, const T& value) :
+        _rows(row), _cols(col), data(value, _rows * _cols) {}
 
-    virtual ~Matrix();
+    // Initialize with array
+    Matrix(size_t row, size_t col, const T* values) :
+        _rows(row), _cols(col), data(values, _rows * _cols) {}
 
-    Matrix<T> operator-() const;
+    // Initialize with initializer list
+    Matrix(size_t row, size_t col, const std::initializer_list<T>& values) :
+        _rows(row), _cols(col), data(values) {}
 
-    Matrix<T> operator+(const Matrix<T>&) const;
-    Matrix<T>& operator+=(const Matrix<T>&);
-    Matrix<T> operator-(const Matrix<T>&) const;
-    Matrix<T>& operator-=(const Matrix<T>&);
+    virtual ~Matrix() {}
 
-    Matrix<T> operator*(const T&) const;
-    Matrix<T>& operator*=(const T&);
-    Matrix<T> operator/(const T&) const;
-    Matrix<T>& operator/=(const T&);
+    //-------------------------------------------------------------------------
 
-    // access items
-    T& operator()(size_t, size_t);
+    //-------------------------------------------------------------------------
+    // OPERATORS
 
-    // prints out the matrix to a stream
-    void printMatrix(std::ostream&);
+    // Negate matrix values
+    Matrix<T> operator-() const
+    {
+        Matrix<T> result(*this);
+        result.data = -result.data;
+        return result;
+    }
 
-    Matrix<T> transpose();
+    // Addition / subtraction
+    Matrix<T> operator+(const Matrix<T>& rhs) const
+    {
+        Matrix<T> result(*this);
+        result += rhs;
+        return result;
+    }
 
-    // returns matrix size
-    size_t size() const;
+    Matrix<T>& operator+=(const Matrix<T>& rhs)
+    {
+        if (rhs._rows == _rows && rhs._cols == _cols)
+            this->data += rhs.data;
+        else
+            throw SimpleException("Only equal sized matrices can be added!");
+
+        return *this;
+    }
+
+    Matrix<T> operator-(const Matrix<T>& rhs) const
+    {
+        Matrix<T> result(*this);
+        result -= rhs;
+        return result;
+    }
+
+    inline Matrix<T>& operator-=(const Matrix<T>& rhs)
+    {
+        return *this += -rhs;
+    }
+
+    // Scalar multiplication / division
+    Matrix<T> operator*(const T& rhs) const
+    {
+        Matrix<T> result(*this);
+        result *= rhs;
+        return result;
+    }
+
+    Matrix<T>& operator*=(const T& rhs)
+    {
+        this->data *= rhs;
+        return *this;
+    }
+
+    Matrix<T> operator/(const T& rhs) const
+    {
+        Matrix<T> result(*this);
+        result /= rhs;
+        return result;
+    }
+
+    Matrix<T>& operator/=(const T& rhs)
+    {
+        this->data /= rhs;
+        return *this;
+    }
+
+    // Matrix multiplication / division
+    Matrix<T> operator*(const Matrix<T>& rhs) const
+    {
+        if (_rows == rhs._cols && _cols == rhs._rows)
+        {
+            Matrix<T> result(_rows, rhs._cols);
+
+            for (size_t i = 0; i < _rows; ++i)
+            {
+                for (size_t j = 0; j < rhs._cols; ++j)
+                {
+                    T x = (this->getRow(i) * rhs.getCol(j)).sum();
+                    result(i, j) = x;
+                }
+            }
+
+            return result;
+        }
+        else
+            throw SimpleException("Matrix multiplication is not possible!");
+    }
+
+    inline Matrix<T> operator/(const Matrix<T>& rhs) const
+    {
+        return *this * (1 / rhs);
+    }
+
+    // Access items
+    inline T& operator()(size_t row, size_t col)
+    {
+        if (data.size() > 0 && row < _rows && col < _cols)
+            return data[row * _cols + col];
+        else
+            throw SimpleException("Index out of range!");
+    }
+
+    inline friend std::ostream& operator<<(std::ostream& os, Matrix<T>& m)
+    {
+        m.printMatrix(os);
+        return os;
+    }
+
+    friend Matrix<T> operator*(const T& lhs, const Matrix<T>& rhs)
+    {
+        Matrix<T> result(rhs);
+        result.data = lhs * rhs.data;
+        return result;
+    }
+
+    friend Matrix<T> operator/(const T& lhs, const Matrix<T>& rhs)
+    {
+        Matrix<T> result(rhs);
+        result.data = lhs / rhs.data;
+        return result;
+    }
+
+    //-------------------------------------------------------------------------
+
+    // Compute transpose of matrix
+    Matrix<T> transpose() const
+    {
+        Matrix<T> trans(_cols, _rows);
+
+        for (size_t n = 0; n < this->_cols * _rows; ++n)
+        {
+            int i = n / _rows;
+            int j = n % _rows;
+            trans.data[n] = this->data[_cols * j + i];
+        }
+
+        return trans;
+    }
+
+    // Returns matrix size
+    inline size_t size() const
+    {
+        return data.size();
+    }
+
+    inline std::valarray<T> getRow(const size_t& row) const
+    {
+        return data[std::slice(row * _cols, _cols, 1)];
+    }
+
+    inline std::valarray<T> getCol(const size_t& col) const
+    {
+        return data[std::slice(col, _rows, _cols)];
+    }
+
+    // Prints out the matrix to a stream
+    void printMatrix(std::ostream& os)
+    {
+        // count biggest element's digits
+        T streamWidth = std::to_string(std::abs(data).max()).size();
+
+        // if there is a negative item, include the '-' sign's width
+        if (data.min() < 0)
+            streamWidth++;
+
+        for (size_t i = 0; i < _rows; ++i)
+        {
+            os << "|";
+
+            for (size_t j = 0; j < _cols; ++j)
+            {
+                // set to digits of biggest element
+                os.width(streamWidth);
+                os << this->data[i * _cols + j];
+
+                if (j == _cols - 1)
+                    os << "|" << std::endl;
+                else
+                    os << " ";
+            }
+        }
+    }
 
 protected:
     size_t _rows;
@@ -68,174 +240,21 @@ protected:
     std::valarray<T> data;
 };
 
+// for Matrix<T>::getRows and Matrix<T>::getCols
 template <typename T>
-Matrix<T>::Matrix() : _rows(0), _cols(0), data()
+std::ostream& operator<<(std::ostream& os, std::valarray<T>& va)
 {
-}
+    for (auto& i : va)
+        os << i << " ";
 
-template <typename T>
-Matrix<T>::Matrix(size_t row, size_t col) :
-    _rows(row), _cols(col), data(_rows * _cols)
-{
-}
-
-template <typename T>
-Matrix<T>::Matrix(size_t row, size_t col, const T& value) :
-    _rows(row), _cols(col), data(value, _rows * _cols)
-{
-}
-
-template <typename T>
-Matrix<T>::Matrix(size_t row, size_t col, const T* value) :
-    _rows(row), _cols(col), data(value, _rows * _cols)
-{
-}
-
-template <typename T>
-Matrix<T>::Matrix(size_t row, size_t col,
-                  const std::initializer_list<T>& values) :
-    _rows(row), _cols(col), data(values)
-{
-}
-
-template <typename T>
-Matrix<T>::~Matrix()
-{
-}
-
-template <typename T>
-Matrix<T> Matrix<T>::operator-() const
-{
-    Matrix<T> result(*this);
-    result.data = -result.data;
-    return result;
-}
-
-template <typename T>
-Matrix<T> Matrix<T>::operator+(const Matrix<T>& rhs) const
-{
-    Matrix<T> result(*this);
-    result += rhs;
-    return result;
-}
-
-template <typename T>
-Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& rhs)
-{
-    if (rhs._rows == _rows && rhs._cols == _cols)
-        this->data += rhs.data;
-    else
-        throw SimpleException("Only equal sized matrices can be added!");
-
-    return *this;
-}
-
-template <typename T>
-Matrix<T> Matrix<T>::operator-(const Matrix<T>& rhs) const
-{
-    Matrix<T> result(*this);
-    result -= rhs;
-    return result;
-}
-
-template <typename T>
-Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& rhs)
-{
-    if (rhs._rows == _rows && rhs._cols == _cols)
-        this->data -= rhs.data;
-    else
-        throw SimpleException("Only equal sized matrices can be subtracted!");
-
-    return *this;
-}
-
-template <typename T>
-Matrix<T> Matrix<T>::operator*(const T& rhs) const
-{
-    Matrix<T> result(*this);
-    result *= rhs;
-    return result;
-}
-
-template <typename T>
-Matrix<T>& Matrix<T>::operator*=(const T& rhs)
-{
-    this->data *= rhs;
-    return *this;
-}
-
-template <typename T>
-Matrix<T> Matrix<T>::operator/(const T& rhs) const
-{
-    Matrix<T> result(*this);
-    result /= rhs;
-    return result;
-}
-
-template <typename T>
-Matrix<T>& Matrix<T>::operator/=(const T& rhs)
-{
-    this->data /= rhs;
-    return *this;
-}
-
-template <typename T>
-T& Matrix<T>::operator()(size_t row, size_t col)
-{
-    if (data.size() > 0 && row < _rows && col < _cols)
-        return data[row * _cols + col];
-    else
-        throw SimpleException("Index out of range!");
-}
-
-template <typename T>
-void Matrix<T>::printMatrix(std::ostream& os)
-{
-    T streamWidth = std::to_string(this->data.max()).size();
-
-    for (size_t i = 0; i < _rows; ++i)
-    {
-        os << "|";
-
-        for (size_t j = 0; j < _cols; ++j)
-        {
-            os.width(streamWidth);
-            os << this->data[i * _cols + j];
-
-            if (j == _cols - 1)
-                os << "|" << std::endl;
-            else
-                os << " ";
-        }
-    }
-}
-
-template <typename T>
-std::ostream& operator<<(std::ostream& os, Matrix<T>& obj)
-{
-    obj.printMatrix(os);
     return os;
 }
 
+// same as above, but for rvalues
 template <typename T>
-Matrix<T> Matrix<T>::transpose()
+inline std::ostream& operator<<(std::ostream& os, std::valarray<T>&& va)
 {
-    Matrix<T> trans(_cols, _rows);
-
-    for (size_t n = 0; n < this->_cols * _rows; ++n)
-    {
-        int i = n / _rows;
-        int j = n % _rows;
-        trans.data[n] = this->data[_cols * j + i];
-    }
-
-    return trans;
-}
-
-template <typename T>
-inline size_t Matrix<T>::size() const
-{
-    return data.size();
+    return os << va;
 }
 
 #endif /* end of include guard: MATRIX_HPP */
