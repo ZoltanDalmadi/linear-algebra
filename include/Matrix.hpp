@@ -3,6 +3,7 @@
 
 #include <valarray>
 #include <exception>
+#include <string>
 
 class SimpleException : public std::exception
 {
@@ -45,7 +46,7 @@ public:
     Matrix(size_t row, size_t col, const std::initializer_list<T>& values) :
         _rows(row), _cols(col), data(values) {}
 
-    virtual ~Matrix() {}
+    ~Matrix() {}
 
     //-------------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ public:
 
     Matrix<T>& operator+=(const Matrix<T>& rhs)
     {
-        if (rhs._rows == _rows && rhs._cols == _cols)
+        if (rhs._rows == this->_rows && rhs._cols == this->_cols)
             this->data += rhs.data;
         else
             throw SimpleException("Only equal sized matrices can be added!");
@@ -120,11 +121,11 @@ public:
     // Matrix multiplication / division
     Matrix<T> operator*(const Matrix<T>& rhs) const
     {
-        if (_rows == rhs._cols && _cols == rhs._rows)
+        if (this->_cols == rhs._rows)
         {
-            Matrix<T> result(_rows, rhs._cols);
+            Matrix<T> result(this->_rows, rhs._cols);
 
-            for (size_t i = 0; i < _rows; ++i)
+            for (size_t i = 0; i < this->_rows; ++i)
             {
                 for (size_t j = 0; j < rhs._cols; ++j)
                 {
@@ -147,8 +148,8 @@ public:
     // Access items
     inline T& operator()(size_t row, size_t col)
     {
-        if (data.size() > 0 && row < _rows && col < _cols)
-            return data[row * _cols + col];
+        if (data.size() > 0 && row < this->_rows && col < this->_cols)
+            return data[row * this->_cols + col];
         else
             throw SimpleException("Index out of range!");
     }
@@ -157,6 +158,11 @@ public:
     {
         m.printMatrix(os);
         return os;
+    }
+
+    inline friend std::ostream& operator<<(std::ostream& os, Matrix<T>&& m)
+    {
+        return os << m;
     }
 
     friend Matrix<T> operator*(const T& lhs, const Matrix<T>& rhs)
@@ -178,13 +184,13 @@ public:
     // Compute transpose of matrix
     Matrix<T> transpose() const
     {
-        Matrix<T> trans(_cols, _rows);
+        Matrix<T> trans(this->_cols, this->_rows);
 
-        for (size_t n = 0; n < this->_cols * _rows; ++n)
+        for (size_t n = 0; n < this->_cols * this->_rows; ++n)
         {
-            int i = n / _rows;
-            int j = n % _rows;
-            trans.data[n] = this->data[_cols * j + i];
+            int i = n / this->_rows;
+            int j = n % this->_rows;
+            trans.data[n] = this->data[this->_cols * j + i];
         }
 
         return trans;
@@ -198,12 +204,12 @@ public:
 
     inline std::valarray<T> getRow(const size_t& row) const
     {
-        return data[std::slice(row * _cols, _cols, 1)];
+        return data[std::slice(row * this->_cols, this->_cols, 1)];
     }
 
     inline std::valarray<T> getCol(const size_t& col) const
     {
-        return data[std::slice(col, _rows, _cols)];
+        return data[std::slice(col, this->_rows, this->_cols)];
     }
 
     // Prints out the matrix to a stream
@@ -216,17 +222,17 @@ public:
         if (data.min() < 0)
             streamWidth++;
 
-        for (size_t i = 0; i < _rows; ++i)
+        for (size_t i = 0; i < this->_rows; ++i)
         {
             os << "|";
 
-            for (size_t j = 0; j < _cols; ++j)
+            for (size_t j = 0; j < this->_cols; ++j)
             {
                 // set to digits of biggest element
                 os.width(streamWidth);
-                os << this->data[i * _cols + j];
+                os << this->data[i * this->_cols + j];
 
-                if (j == _cols - 1)
+                if (j == this->_cols - 1)
                     os << "|" << std::endl;
                 else
                     os << " ";
