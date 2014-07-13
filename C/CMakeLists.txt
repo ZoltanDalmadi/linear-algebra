@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+project(CMatrix)
+set(CMAKE_C_FLAGS "-Wall -std=c11")
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(CMAKE_BUILD_TYPE Debug)
+include_directories(include)
+add_subdirectory(src)
