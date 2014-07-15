@@ -49,4 +49,18 @@ void printMatrix(MATRIX* m)
                 printf(" ");
         }
     }
+    printf("\n");
+}
+
+MATRIX* transpose(MATRIX* m)
+{
+    MATRIX *trans = createMatrix(m->_cols, m->_rows);
+
+    for (int i = 0; i < m->_cols; ++i)
+    {
+        for (int j = 0; j < m->_rows; ++j)
+            trans->_data[i][j] = m->_data[j][i];
+    }
+
+    return trans;
 }

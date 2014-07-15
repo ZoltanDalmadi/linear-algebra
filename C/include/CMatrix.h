@@ -19,4 +19,6 @@ void destroyMatrix(MATRIX*);
 
 void printMatrix(MATRIX*);
 
+MATRIX* transpose(MATRIX*);
+
 #endif /* end of include guard: CMATRIX_H */
