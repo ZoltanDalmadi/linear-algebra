@@ -13,6 +13,8 @@ typedef struct Matrix
 
 MATRIX* createMatrix(unsigned, unsigned);
 
+void initMatrix(MATRIX*, int*);
+
 MATRIX* createIdentityMatrix(unsigned);
 
 void destroyMatrix(MATRIX*);

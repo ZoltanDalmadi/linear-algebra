@@ -14,14 +14,14 @@ int main()
     printMatrix(m3);
 
     MATRIX *m4 = createMatrix(4, 2);
-    m4->_data[0][0] = 1;
-    m4->_data[0][1] = 2;
-    m4->_data[1][0] = 3;
-    m4->_data[1][1] = 4;
-    m4->_data[2][0] = 5;
-    m4->_data[2][1] = 6;
-    m4->_data[3][0] = 7;
-    m4->_data[3][1] = 8;
+
+    int arr[] = {1, 2,
+                 3, 4,
+                 5, 6,
+                 7, 8
+                };
+
+    initMatrix(m4, arr);
 
     printMatrix(m4);
 

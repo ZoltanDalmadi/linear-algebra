@@ -13,6 +13,15 @@ MATRIX* createMatrix(unsigned rows, unsigned cols)
     return m;
 }
 
+void initMatrix(MATRIX* m, int* a)
+{
+    for (int i = 0; i < m->_rows; ++i)
+    {
+        for (int j = 0; j < m->_cols; ++j)
+            m->_data[i][j] = a[i * m->_cols + j];
+    }
+}
+
 MATRIX* createIdentityMatrix(unsigned rowcols)
 {
     MATRIX *m = createMatrix(rowcols, rowcols);
@@ -49,6 +58,7 @@ void printMatrix(MATRIX* m)
                 printf(" ");
         }
     }
+
     printf("\n");
 }
 
