@@ -43,6 +43,11 @@ int main()
     MATRIX *m7 = addMatrices(m2, m3);
     printMatrix(m7);
 
+    MATRIX *m8 = copyMatrix(m7);
+    scalarMultiplyMatrix(m8, 9);
+    printMatrix(m8);
+
+    destroyMatrix(m8);
     destroyMatrix(m7);
     destroyMatrix(m6);
     destroyMatrix(m5);

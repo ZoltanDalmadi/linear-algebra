@@ -13,6 +13,19 @@ MATRIX* createMatrix(size_t rows, size_t cols)
     return m;
 }
 
+MATRIX* copyMatrix(MATRIX *m)
+{
+    MATRIX *copy = createMatrix(m->_rows, m->_cols);
+
+    for (size_t i = 0; i < copy->_rows; ++i)
+    {
+        for (size_t j = 0; j < copy->_cols; ++j)
+            copy->_data[i][j] = m->_data[i][j];
+    }
+
+    return copy;
+}
+
 void initMatrix(MATRIX* m, int* a)
 {
     for (size_t i = 0; i < m->_rows; ++i)
@@ -127,4 +140,13 @@ MATRIX* addMatrices(MATRIX* A, MATRIX* B)
     }
 
     return result;
+}
+
+void scalarMultiplyMatrix(MATRIX* m, int scalar)
+{
+    for (size_t i = 0; i < m->_rows; ++i)
+    {
+        for (size_t j = 0; j < m->_cols; ++j)
+            m->_data[i][j] *= scalar;
+    }
 }
