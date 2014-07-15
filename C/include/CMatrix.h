@@ -33,4 +33,6 @@ MATRIX* addMatrices(MATRIX*, MATRIX*);
 
 void scalarMultiplyMatrix(MATRIX*, int);
 
+MATRIX* multiplyMatrices(MATRIX*, MATRIX*);
+
 #endif /* end of include guard: CMATRIX_H */

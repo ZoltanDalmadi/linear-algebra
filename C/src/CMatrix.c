@@ -150,3 +150,25 @@ void scalarMultiplyMatrix(MATRIX* m, int scalar)
             m->_data[i][j] *= scalar;
     }
 }
+
+MATRIX* multiplyMatrices(MATRIX* A, MATRIX* B)
+{
+    if (A->_cols != B->_rows)
+    {
+        fprintf(stderr, "Matrices cannot be multiplied!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    MATRIX *result = createMatrix(A->_rows, B->_cols);
+
+    for (size_t i = 0; i < A->_rows; ++i)
+    {
+        for (size_t j = 0; j < B->_cols; ++j)
+        {
+            for (int k = 0; k < A->_cols; ++k)
+                result->_data[i][j] += A->_data[i][k] * B->_data[k][j];
+        }
+    }
+
+    return result;
+}

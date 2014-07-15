@@ -47,6 +47,29 @@ int main()
     scalarMultiplyMatrix(m8, 9);
     printMatrix(m8);
 
+    int arr2[] = {1, 0, 2,
+                  -1, 3, 1
+                 };
+
+    MATRIX *m9 = createMatrix(2, 3);
+    initMatrix(m9, arr2);
+    printMatrix(m9);
+
+    int arr3[] = {3, 1,
+                  2, 1,
+                  1, 0
+                 };
+
+    MATRIX *m10 = createMatrix(3, 2);
+    initMatrix(m10, arr3);
+    printMatrix(m10);
+
+    MATRIX *m11 = multiplyMatrices(m9, m10);
+    printMatrix(m11);
+
+    destroyMatrix(m11);
+    destroyMatrix(m10);
+    destroyMatrix(m9);
     destroyMatrix(m8);
     destroyMatrix(m7);
     destroyMatrix(m6);
