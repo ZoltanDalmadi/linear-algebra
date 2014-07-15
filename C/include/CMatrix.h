@@ -6,16 +6,16 @@
 
 typedef struct Matrix
 {
-    unsigned _rows;
-    unsigned _cols;
+    size_t _rows;
+    size_t _cols;
     int **_data;
 } MATRIX;
 
-MATRIX* createMatrix(unsigned, unsigned);
+MATRIX* createMatrix(size_t, size_t);
 
 void initMatrix(MATRIX*, int*);
 
-MATRIX* createIdentityMatrix(unsigned);
+MATRIX* createIdentityMatrix(size_t);
 
 void destroyMatrix(MATRIX*);
 
@@ -24,5 +24,7 @@ void printMatrix(MATRIX*);
 MATRIX* transpose(MATRIX*);
 
 MATRIX* concatMatrices(MATRIX*, MATRIX*);
+
+void swapRows(MATRIX *m, size_t, size_t);
 
 #endif /* end of include guard: CMATRIX_H */

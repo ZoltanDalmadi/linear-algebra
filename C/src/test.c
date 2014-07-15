@@ -36,6 +36,10 @@ int main()
     MATRIX *m6 = concatMatrices(m2, m3);
     printMatrix(m6);
 
+    swapRows(m6, 0, 1);
+
+    printMatrix(m6);
+
     destroyMatrix(m6);
     destroyMatrix(m5);
     destroyMatrix(m4);

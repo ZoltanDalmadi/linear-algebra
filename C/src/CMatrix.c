@@ -1,13 +1,13 @@
 #include "CMatrix.h"
 
-MATRIX* createMatrix(unsigned rows, unsigned cols)
+MATRIX* createMatrix(size_t rows, size_t cols)
 {
     MATRIX *m = (MATRIX*)calloc(1, sizeof(MATRIX));
     m->_rows = rows;
     m->_cols = cols;
     m->_data = (int **)calloc(rows, sizeof(int *));
 
-    for (int i = 0; i < rows; ++i)
+    for (size_t i = 0; i < rows; ++i)
         m->_data[i] = (int *)calloc(cols, sizeof(int));
 
     return m;
@@ -15,18 +15,18 @@ MATRIX* createMatrix(unsigned rows, unsigned cols)
 
 void initMatrix(MATRIX* m, int* a)
 {
-    for (int i = 0; i < m->_rows; ++i)
+    for (size_t i = 0; i < m->_rows; ++i)
     {
-        for (int j = 0; j < m->_cols; ++j)
+        for (size_t j = 0; j < m->_cols; ++j)
             m->_data[i][j] = a[i * m->_cols + j];
     }
 }
 
-MATRIX* createIdentityMatrix(unsigned rowcols)
+MATRIX* createIdentityMatrix(size_t rowcols)
 {
     MATRIX *m = createMatrix(rowcols, rowcols);
 
-    for (int i = 0; i < rowcols; ++i)
+    for (size_t i = 0; i < rowcols; ++i)
         m->_data[i][i]++;
 
     return m;
@@ -34,7 +34,7 @@ MATRIX* createIdentityMatrix(unsigned rowcols)
 
 void destroyMatrix(MATRIX* m)
 {
-    for (int i = 0; i < m->_rows; ++i)
+    for (size_t i = 0; i < m->_rows; ++i)
         free(m->_data[i]);
 
     free(m->_data);
@@ -44,11 +44,11 @@ void destroyMatrix(MATRIX* m)
 
 void printMatrix(MATRIX* m)
 {
-    for (int i = 0; i < m->_rows; ++i)
+    for (size_t i = 0; i < m->_rows; ++i)
     {
         printf("|");
 
-        for (int j = 0; j < m->_cols; ++j)
+        for (size_t j = 0; j < m->_cols; ++j)
         {
             printf("%d", m->_data[i][j]);
 
@@ -66,9 +66,9 @@ MATRIX* transpose(MATRIX* m)
 {
     MATRIX *trans = createMatrix(m->_cols, m->_rows);
 
-    for (int i = 0; i < m->_cols; ++i)
+    for (size_t i = 0; i < m->_cols; ++i)
     {
-        for (int j = 0; j < m->_rows; ++j)
+        for (size_t j = 0; j < m->_rows; ++j)
             trans->_data[i][j] = m->_data[j][i];
     }
 
@@ -88,9 +88,9 @@ MATRIX* concatMatrices(MATRIX* A, MATRIX* B)
     MATRIX *concat = createMatrix(A->_rows, A->_cols + B->_cols);
 
     // insert columns next to each other
-    for (int i = 0; i < concat->_cols; ++i)
+    for (size_t i = 0; i < concat->_cols; ++i)
     {
-        for (int j = 0; j < concat->_rows; ++j)
+        for (size_t j = 0; j < concat->_rows; ++j)
         {
             if (i < A->_cols)
                 concat->_data[j][i] = A->_data[j][i];
@@ -100,4 +100,12 @@ MATRIX* concatMatrices(MATRIX* A, MATRIX* B)
     }
 
     return concat;
+}
+
+void swapRows(MATRIX *m, size_t a, size_t b)
+{
+    // just swap the pointers
+    int *temp = m->_data[a];
+    m->_data[a] = m->_data[b];
+    m->_data[b] = temp;
 }
