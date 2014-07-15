@@ -109,3 +109,22 @@ void swapRows(MATRIX *m, size_t a, size_t b)
     m->_data[a] = m->_data[b];
     m->_data[b] = temp;
 }
+
+MATRIX* addMatrices(MATRIX* A, MATRIX* B)
+{
+    if (A->_rows != B->_rows && A->_cols != B->_cols)
+    {
+        fprintf(stderr, "Matrices cannot be added!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    MATRIX *result = createMatrix(A->_rows, A->_cols);
+
+    for (size_t i = 0; i < result->_rows; ++i)
+    {
+        for (size_t j = 0; j < result->_cols; ++j)
+            result->_data[i][j] = A->_data[i][j] + B->_data[i][j];
+    }
+
+    return result;
+}

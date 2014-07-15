@@ -40,6 +40,10 @@ int main()
 
     printMatrix(m6);
 
+    MATRIX *m7 = addMatrices(m2, m3);
+    printMatrix(m7);
+
+    destroyMatrix(m7);
     destroyMatrix(m6);
     destroyMatrix(m5);
     destroyMatrix(m4);

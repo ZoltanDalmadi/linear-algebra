@@ -25,6 +25,8 @@ MATRIX* transpose(MATRIX*);
 
 MATRIX* concatMatrices(MATRIX*, MATRIX*);
 
-void swapRows(MATRIX *m, size_t, size_t);
+void swapRows(MATRIX*, size_t, size_t);
+
+MATRIX* addMatrices(MATRIX*, MATRIX*);
 
 #endif /* end of include guard: CMATRIX_H */
