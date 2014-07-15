@@ -23,4 +23,6 @@ void printMatrix(MATRIX*);
 
 MATRIX* transpose(MATRIX*);
 
+MATRIX* concatMatrices(MATRIX*, MATRIX*);
+
 #endif /* end of include guard: CMATRIX_H */

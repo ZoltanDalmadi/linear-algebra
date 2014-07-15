@@ -74,3 +74,30 @@ MATRIX* transpose(MATRIX* m)
 
     return trans;
 }
+
+MATRIX* concatMatrices(MATRIX* A, MATRIX* B)
+{
+    // check equal rows
+    if (A->_rows != B->_rows)
+    {
+        fprintf(stderr, "Matrices cannot be concatenated!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // create concatenated matrix
+    MATRIX *concat = createMatrix(A->_rows, A->_cols + B->_cols);
+
+    // insert columns next to each other
+    for (int i = 0; i < concat->_cols; ++i)
+    {
+        for (int j = 0; j < concat->_rows; ++j)
+        {
+            if (i < A->_cols)
+                concat->_data[j][i] = A->_data[j][i];
+            else
+                concat->_data[j][i] = B->_data[j][i - A->_cols];
+        }
+    }
+
+    return concat;
+}

@@ -2,15 +2,19 @@
 
 int main()
 {
-    MATRIX *m = createMatrix(2, 2);
-    m->_data[0][1] = 7;
-    printMatrix(m);
-
     MATRIX *m2 = createMatrix(3, 3);
-    m2->_data[1][1] = 8;
+
+    int count = 0;
+
+    for (int i = 0; i < m2->_rows; ++i)
+    {
+        for (int j = 0; j < m2->_cols; ++j)
+            m2->_data[i][j] = ++count;
+    }
+
     printMatrix(m2);
 
-    MATRIX *m3 = createIdentityMatrix(4);
+    MATRIX *m3 = createIdentityMatrix(3);
     printMatrix(m3);
 
     MATRIX *m4 = createMatrix(4, 2);
@@ -29,11 +33,14 @@ int main()
 
     printMatrix(m5);
 
+    MATRIX *m6 = concatMatrices(m2, m3);
+    printMatrix(m6);
+
+    destroyMatrix(m6);
     destroyMatrix(m5);
     destroyMatrix(m4);
     destroyMatrix(m3);
     destroyMatrix(m2);
-    destroyMatrix(m);
 
     return 0;
 }
