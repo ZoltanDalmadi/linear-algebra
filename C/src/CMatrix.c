@@ -5,10 +5,10 @@ MATRIX* createMatrix(size_t rows, size_t cols)
     MATRIX *m = (MATRIX*)calloc(1, sizeof(MATRIX));
     m->_rows = rows;
     m->_cols = cols;
-    m->_data = (int **)calloc(rows, sizeof(int *));
+    m->_data = (double **)calloc(rows, sizeof(double *));
 
     for (size_t i = 0; i < rows; ++i)
-        m->_data[i] = (int *)calloc(cols, sizeof(int));
+        m->_data[i] = (double *)calloc(cols, sizeof(double));
 
     return m;
 }
@@ -26,7 +26,7 @@ MATRIX* copyMatrix(MATRIX *m)
     return copy;
 }
 
-void initMatrix(MATRIX* m, int* a)
+void initMatrix(MATRIX* m, double* a)
 {
     for (size_t i = 0; i < m->_rows; ++i)
     {
@@ -63,7 +63,7 @@ void printMatrix(MATRIX* m)
 
         for (size_t j = 0; j < m->_cols; ++j)
         {
-            printf("%d", m->_data[i][j]);
+            printf("%f", m->_data[i][j]);
 
             if (j == m->_cols - 1)
                 printf("|\n");
@@ -118,7 +118,7 @@ MATRIX* concatMatrices(MATRIX* A, MATRIX* B)
 void swapRows(MATRIX *m, size_t a, size_t b)
 {
     // just swap the pointers
-    int *temp = m->_data[a];
+    double *temp = m->_data[a];
     m->_data[a] = m->_data[b];
     m->_data[b] = temp;
 }
@@ -142,7 +142,7 @@ MATRIX* addMatrices(MATRIX* A, MATRIX* B)
     return result;
 }
 
-void scalarMultiplyMatrix(MATRIX* m, int scalar)
+void scalarMultiplyMatrix(MATRIX* m, double scalar)
 {
     for (size_t i = 0; i < m->_rows; ++i)
     {
@@ -165,10 +165,80 @@ MATRIX* multiplyMatrices(MATRIX* A, MATRIX* B)
     {
         for (size_t j = 0; j < B->_cols; ++j)
         {
-            for (int k = 0; k < A->_cols; ++k)
+            for (size_t k = 0; k < A->_cols; ++k)
                 result->_data[i][j] += A->_data[i][k] * B->_data[k][j];
         }
     }
 
     return result;
+}
+
+MATRIX* inverse(MATRIX* m)
+{
+    if (m->_rows != m->_cols)
+    {
+        fprintf(stderr, "Only square matrices can be inverted!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // put identity matrix next to original matrix
+    MATRIX *id = createIdentityMatrix(m->_rows);
+    MATRIX *aug = concatMatrices(m, id);
+
+    // id no longer needed
+    destroyMatrix(id);
+
+    // do Gaussian Elimination
+    for (size_t j = 0; j < m->_cols; ++j)
+    {
+        double max = 0.0;
+        size_t maxRow = 0;
+
+        // find biggest absolute value of rows 1st item
+        for (size_t i = j; i < aug->_rows; ++i)
+        {
+            if (aug->_data[i][j] > max)
+            {
+                max = aug->_data[i][j];
+                maxRow = i;
+            }
+        }
+
+        // swap rows so that bigges abs value row is first
+        if (maxRow != j)
+            swapRows(aug, maxRow, j);
+
+        // divide whole row with its first item
+        double divisor = aug->_data[j][j];
+
+        for (size_t i = 0; i < aug->_cols; ++i)
+            aug->_data[j][i] /= divisor;
+
+        // clear entries above and below to 0
+        for (size_t r = 0; r < aug->_rows; ++r)
+        {
+            if (r == j)
+                continue;
+
+            double mult = aug->_data[r][j];
+
+            for (size_t i = 0; i < aug->_cols; ++i)
+                aug->_data[r][i] -= aug->_data[j][i] * mult;
+
+        }
+    }
+
+    // extract inverse (right half of augmented matrix)
+    MATRIX *inv = createMatrix(m->_rows, m->_cols);
+
+    for (size_t i = 0; i < aug->_cols - m->_cols; ++i)
+    {
+        for (size_t j = 0; j < aug->_rows; ++j)
+            inv->_data[j][i] = aug->_data[j][i + m->_cols];
+    }
+
+    // augmented matrix no longer needed
+    destroyMatrix(aug);
+
+    return inv;
 }

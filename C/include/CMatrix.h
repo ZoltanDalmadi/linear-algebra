@@ -8,14 +8,14 @@ typedef struct Matrix
 {
     size_t _rows;
     size_t _cols;
-    int **_data;
+    double **_data;
 } MATRIX;
 
 MATRIX* createMatrix(size_t, size_t);
 
 MATRIX* copyMatrix(MATRIX*);
 
-void initMatrix(MATRIX*, int*);
+void initMatrix(MATRIX*, double*);
 
 MATRIX* createIdentityMatrix(size_t);
 
@@ -31,8 +31,10 @@ void swapRows(MATRIX*, size_t, size_t);
 
 MATRIX* addMatrices(MATRIX*, MATRIX*);
 
-void scalarMultiplyMatrix(MATRIX*, int);
+void scalarMultiplyMatrix(MATRIX*, double);
 
 MATRIX* multiplyMatrices(MATRIX*, MATRIX*);
+
+MATRIX* inverse(MATRIX*);
 
 #endif /* end of include guard: CMATRIX_H */
