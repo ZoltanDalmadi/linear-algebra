@@ -1,4 +1,5 @@
 #include "CMatrix.h"
+#include <math.h>
 
 MATRIX* createMatrix(size_t rows, size_t cols)
 {
@@ -197,9 +198,9 @@ MATRIX* inverse(MATRIX* m)
         // find biggest absolute value of rows 1st item
         for (size_t i = j; i < aug->_rows; ++i)
         {
-            if (aug->_data[i][j] > max)
+            if (fabs(aug->_data[i][j]) > max)
             {
-                max = aug->_data[i][j];
+                max = fabs(aug->_data[i][j]);
                 maxRow = i;
             }
         }
