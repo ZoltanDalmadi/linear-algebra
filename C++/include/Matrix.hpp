@@ -71,11 +71,10 @@ public:
 
     Matrix<T>& operator+=(const Matrix<T>& rhs)
     {
-        if (rhs._rows == this->_rows && rhs._cols == this->_cols)
-            this->data += rhs.data;
-        else
+        if (rhs._rows != this->_rows && rhs._cols != this->_cols)
             throw SimpleException("Only equal sized matrices can be added!");
 
+        this->data += rhs.data;
         return *this;
     }
 
@@ -121,23 +120,21 @@ public:
     // Matrix multiplication / division
     Matrix<T> operator*(const Matrix<T>& rhs) const
     {
-        if (this->_cols == rhs._rows)
-        {
-            Matrix<T> result(this->_rows, rhs._cols);
-
-            for (size_t i = 0; i < this->_rows; ++i)
-            {
-                for (size_t j = 0; j < rhs._cols; ++j)
-                {
-                    T x = (this->getRow(i) * rhs.getCol(j)).sum();
-                    result(i, j) = x;
-                }
-            }
-
-            return result;
-        }
-        else
+        if (this->_cols != rhs._rows)
             throw SimpleException("Matrix multiplication is not possible!");
+
+        Matrix<T> result(this->_rows, rhs._cols);
+
+        for (size_t i = 0; i < this->_rows; ++i)
+        {
+            for (size_t j = 0; j < rhs._cols; ++j)
+            {
+                T x = (this->getRow(i) * rhs.getCol(j)).sum();
+                result(i, j) = x;
+            }
+        }
+
+        return result;
     }
 
     inline Matrix<T> operator/(const Matrix<T>& rhs) const
@@ -148,10 +145,10 @@ public:
     // Access items
     inline T& operator()(size_t row, size_t col)
     {
-        if (data.size() > 0 && row < this->_rows && col < this->_cols)
-            return data[row * this->_cols + col];
-        else
+        if (data.size() < 0 && row > this->_rows && col > this->_cols)
             throw SimpleException("Index out of range!");
+
+        return data[row * this->_cols + col];
     }
 
     inline friend std::ostream& operator<<(std::ostream& os, Matrix<T>& m)
@@ -220,7 +217,7 @@ public:
 
         // if there is a negative item, include the '-' sign's width
         if (data.min() < 0)
-            streamWidth++;
+            ++streamWidth;
 
         for (size_t i = 0; i < this->_rows; ++i)
         {
