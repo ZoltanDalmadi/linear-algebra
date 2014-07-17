@@ -212,7 +212,7 @@ MATRIX* inverse(MATRIX* m)
         // divide whole row with its first item
         double divisor = aug->_data[j][j];
 
-        for (size_t i = 0; i < aug->_cols; ++i)
+        for (size_t i = j; i < aug->_cols; ++i)
             aug->_data[j][i] /= divisor;
 
         // clear entries above and below to 0
@@ -223,7 +223,7 @@ MATRIX* inverse(MATRIX* m)
 
             double mult = aug->_data[r][j];
 
-            for (size_t i = 0; i < aug->_cols; ++i)
+            for (size_t i = j; i < aug->_cols; ++i)
                 aug->_data[r][i] -= aug->_data[j][i] * mult;
 
         }

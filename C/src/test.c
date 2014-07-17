@@ -79,16 +79,21 @@ int main()
     /* destroyMatrix(m2); */
 
 
-    double arr[] = {1.0, 3.0, 4.0,
-                    -2.0, 5.0, 1.0,
-                    6.0, 0.0, -2.0
-                   };
-    MATRIX *m1 = createMatrix(3, 3);
-    initMatrix(m1, arr);
-    printMatrix(m1);
+    /* double arr[] = {1.0, 3.0, 4.0, */
+    /*                 -2.0, 5.0, 1.0, */
+    /*                 6.0, 0.0, -2.0 */
+    /*                }; */
+
+    MATRIX *m1 = createMatrix(1000, 1000);
+
+    for (int i = 0; i < m1->_rows; ++i)
+    {
+        for (int j = 0; j < m1->_cols; ++j)
+            m1->_data[i][j] = rand() % 1000;
+    }
 
     MATRIX *m2 = inverse(m1);
-    printMatrix(m2);
+    /* printMatrix(m2); */
 
     destroyMatrix(m2);
     destroyMatrix(m1);
